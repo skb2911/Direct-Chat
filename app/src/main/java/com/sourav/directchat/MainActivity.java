@@ -11,8 +11,10 @@ import android.net.wifi.p2p.WifiP2pInfo;
 import android.net.wifi.p2p.WifiP2pManager;
 import android.os.Handler;
 import android.os.Message;
+import android.os.StrictMode;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -38,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
     TextView readMsgBox, connectionStatus;
     EditText writeMsg;
 
+    RecyclerView recyclerViewMsg;
     WifiManager wifiManager;
 
     WifiP2pManager mManager;
@@ -63,6 +66,9 @@ public class MainActivity extends AppCompatActivity {
 
         initialWork();
         exqListener();
+
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
     }
 
     Handler handler = new Handler(new Handler.Callback() {
@@ -147,6 +153,7 @@ public class MainActivity extends AppCompatActivity {
         btnSend = findViewById(R.id.sendButton);
         listView = findViewById(R.id.peerListView);
         readMsgBox = findViewById(R.id.readMsg);
+        recyclerViewMsg = findViewById(R.id.recyclerViewMsg);
         connectionStatus = findViewById(R.id.connectionStatus);
         writeMsg = findViewById(R.id.writeMsg);
 
@@ -276,6 +283,7 @@ public class MainActivity extends AppCompatActivity {
                 outputStream.write(bytes);
             } catch (IOException e) {
                 e.printStackTrace();
+                Toast.makeText(MainActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
             }
         }
     }
